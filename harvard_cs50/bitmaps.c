@@ -8,7 +8,7 @@
  *
  * Enlarges a BMP file by a factor of [n].
  ***************************************************************************/
-       
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,9 +29,9 @@ main(int argc, char *argv[])
     int n = atoi(argv[1]);
     char *infile = argv[2];
     char *outfile = argv[3];
-    
 
-    // open input file 
+
+    // open input file
     FILE *inptr = fopen(infile, "r");
     if (inptr == NULL)
     {
@@ -57,7 +57,7 @@ main(int argc, char *argv[])
     fread(&bi, sizeof(BITMAPINFOHEADER), 1, inptr);
 
     // ensure infile is (likely) a 24-bit uncompressed BMP 4.0
-    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 || 
+    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 ||
         bi.biBitCount != 24 || bi.biCompression != 0)
     {
         fclose(outptr);
@@ -66,16 +66,16 @@ main(int argc, char *argv[])
         return 4;
     }
 
-	// save original neccesary bitmap metadata
-	int old_height = bi.biHeight;
-	int old_width = bi.biWidth;
+    // save original neccesary bitmap metadata
+    int old_height = bi.biHeight;
+    int old_width = bi.biWidth;
     int old_padding =  (4 - (old_width * sizeof(RGBTRIPLE)) % 4) % 4;
 
-	// update bitmap metadata
-	bi.biWidth *= n;
-	bi.biHeight *= n;
-	bf.bfSize = 14 + 40 + abs(bi.biWidth * bi.biHeight * 3);
-	bi.biSizeImage = abs(bi.biWidth * bi.biHeight * 3);
+    // update bitmap metadata
+    bi.biWidth *= n;
+    bi.biHeight *= n;
+    bf.bfSize = 14 + 40 + abs(bi.biWidth * bi.biHeight * 3);
+    bi.biSizeImage = abs(bi.biWidth * bi.biHeight * 3);
 
     // write outfile's BITMAPFILEHEADER
     fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
@@ -88,12 +88,12 @@ main(int argc, char *argv[])
 
     // iterate over infile's scanlines
 
-	RGBTRIPLE *buffer = malloc(sizeof(RGBTRIPLE) * bi.biWidth);
+    RGBTRIPLE *buffer = malloc(sizeof(RGBTRIPLE) * bi.biWidth);
 
-	int i;
+    int i;
     for (i = 0, old_height = abs(old_height); i < old_height; i++)
     {
-    	int element = 0;
+        int element = 0;
         for (int j = 0; j < old_width; j++)
         {
             // temporary storage
@@ -102,22 +102,22 @@ main(int argc, char *argv[])
             // read RGB triple from infile
             fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
-			// write RGB triple to outfile (scaled by [n])
-			for(int scale = 0; scale < n; scale++, element++) {
-				buffer[element] = triple;
-    	    }
+            // write RGB triple to outfile (scaled by [n])
+            for(int scale = 0; scale < n; scale++, element++) {
+                buffer[element] = triple;
+            }
         }
 
         // skip over padding, if any
-   	    fseek(inptr, old_padding, SEEK_CUR);
+           fseek(inptr, old_padding, SEEK_CUR);
 
-		for(int scale = 0; scale < n; scale++) {
-			fwrite(buffer, sizeof(RGBTRIPLE), bi.biWidth, outptr);
-   	   	}
+        for(int scale = 0; scale < n; scale++) {
+            fwrite(buffer, sizeof(RGBTRIPLE), bi.biWidth, outptr);
+              }
 
         // write padding to outfile
-   	    for (int k = 0; k < padding; k++)
-    	    fputc(0x00, outptr);
+           for (int k = 0; k < padding; k++)
+            fputc(0x00, outptr);
     }
 
     // close infile

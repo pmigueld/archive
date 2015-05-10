@@ -6,14 +6,14 @@
  * Computer Science 50
  * Problem Set 3
  *
- * Prompts user for as many as HAY_MAX values until EOF is reached, 
+ * Prompts user for as many as HAY_MAX values until EOF is reached,
  * then proceeds to search that "haystack" of values for given needle.
  *
  * Usage: find needle
  *
  * where needle is the value to find in a haystack of values
  ***************************************************************************/
-       
+
 #include <cs50.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +48,7 @@ main(int argc, char *argv[])
         int straw = GetInt();
         if (straw == INT_MAX)
             break;
-        
+
         // add hay to stack
         haystack[size] = straw;
     }
@@ -74,23 +74,23 @@ main(int argc, char *argv[])
  * Returns true if value is in array of n values, else false.
  */
 
-bool 
+bool
 search(int value, int array[], int low, int high)
 {
-	int mid;
-	
-	if(high < low) {
-		return false;
-	}
-	
-	mid = low + ((high - low) / 2);
-	if(array[mid] > value) {
-		return search(value, array, low, mid - 1);
-	} else if(array[mid] < value) {
-		return search(value, array, mid + 1, high);
-	} else {
-		return true;
-	}
+    int mid;
+
+    if(high < low) {
+        return false;
+    }
+
+    mid = low + ((high - low) / 2);
+    if(array[mid] > value) {
+        return search(value, array, low, mid - 1);
+    } else if(array[mid] < value) {
+        return search(value, array, mid + 1, high);
+    } else {
+        return true;
+    }
 }
 
 
@@ -105,17 +105,17 @@ void
 sort(int values[], int n)
 {
     int x, y;
-    
+
     // bubble sort
     for(x = 0; x < n; x++) {
-    	for(y = 0; y < n; y++) {
-    		if(values[y] > values[y + 1]) {
-    			int temp = values[y + 1];
-    			values[y + 1] = values[y];
-    			values[y] = temp;
-    		}
-    	}
+        for(y = 0; y < n; y++) {
+            if(values[y] > values[y + 1]) {
+                int temp = values[y + 1];
+                values[y + 1] = values[y];
+                values[y] = temp;
+            }
+        }
     }
-    
+
     return;
 }

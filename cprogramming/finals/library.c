@@ -5,11 +5,11 @@
 #include <ctype.h>
 #include <conio.h>
 
-#define T_RETURN      	 'r'
-#define T_BORROW      	 'b'
-#define T_QUIT      	 'q'
-#define MAX      		 10
-#define loop      		 while(1)
+#define T_RETURN           'r'
+#define T_BORROW           'b'
+#define T_QUIT           'q'
+#define MAX               10
+#define loop               while(1)
 #define MAX_ALLOTED_TIME 604800
 
 typedef unsigned short bool;
@@ -39,14 +39,14 @@ int main(void) {
 
     Book *books = (Book *)malloc(sizeof(Book) * MAX);
     fread(books, sizeof(Book), MAX, db);
-    
+
     printf("\nPlease enter your name: ");
     scanf("%[^\n]", name); getchar();
     printf("\nWelcome, %s!\n\n", name);
 
     loop {
         system("cls");
-        printf("    %-25s %-10s %-15s %-15s\n", 
+        printf("    %-25s %-10s %-15s %-15s\n",
                "Title/Author", "Status", "Date Borrowed", "Date Returned");
 
         for(int i = 0; i < MAX; i++) {
@@ -99,9 +99,9 @@ a:
     // Get local time
     now = time(NULL);
     date = localtime(&now);
-    
+
     if(b[index].status == 0) {
-        printf("You are allowed 1 week to keep the book, %s. (penalty is 20php/day)\n", 
+        printf("You are allowed 1 week to keep the book, %s. (penalty is 20php/day)\n",
                b[index].title);
         b[index].status = 1;
         // Save the borrower's name in the 'database'
@@ -109,11 +109,11 @@ a:
         // Clear the date it was last returned
         strcpy(b[index].transaction.date_returned, "");
         // Save the date it was borrowed as a string in the format: MM/DD/YYYY
-        strftime(b[index].transaction.date_borrowed, 
-                 sizeof(b[index].transaction.date_borrowed), 
+        strftime(b[index].transaction.date_borrowed,
+                 sizeof(b[index].transaction.date_borrowed),
                  "%m/%d/%Y", date);
     } else {
-        printf("Sorry, that book has already been borrowed by, %s.\n", 
+        printf("Sorry, that book has already been borrowed by, %s.\n",
                b[index].transaction.borrower);
     }
     getch();
@@ -143,17 +143,17 @@ b:
         // Clear the name of the borrower
         strcpy(b[index].transaction.borrower, "");
         // Save the date it was returned as a string in the format: MM/DD/YYYY
-        strftime(b[index].transaction.date_returned, 
-                 sizeof(b[index].transaction.date_returned), 
+        strftime(b[index].transaction.date_returned,
+                 sizeof(b[index].transaction.date_returned),
                  "%m/%d/%Y", date);
         // Get the internal representation of a date string (string -> time structure)
-        sscanf(b[index].transaction.date_borrowed, "%d/%d/%d", 
+        sscanf(b[index].transaction.date_borrowed, "%d/%d/%d",
                &date->tm_mon, &date->tm_mday, &date->tm_year);
         date->tm_mon--; date->tm_isdst = -1;
         date_borrowed = mktime(date);
         // Calculate penalty (date passed since it was borrowed minus the 7 day alloted time)
         // difftime() returns the time difference in seconds so we convert it to days
-		
+
         penalty = (difftime(date_returned, date_borrowed) - MAX_ALLOTED_TIME) / (24 * 60 * 60);
         if(penalty > 0) {
             printf("This book was due %d day(s) ago. Please pay %dphp to the librarian "

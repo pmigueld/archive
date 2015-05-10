@@ -197,7 +197,7 @@ main(int argc, char *argv[])
         switch (ch)
         {
             // start a new game
-            case 'N': 
+            case 'N':
                 g.number = rand() % max + 1;
                 if (!restart_game())
                 {
@@ -208,7 +208,7 @@ main(int argc, char *argv[])
                 break;
 
             // restart current game
-            case 'R': 
+            case 'R':
                 if (!restart_game())
                 {
                     shutdown();
@@ -217,89 +217,89 @@ main(int argc, char *argv[])
                 }
                 break;
 
-			// cursor movement (with wrap around feature)
-			case KEY_LEFT:
-				if(g.x - 1 >= 0) {
-					g.x -= 1;
-				} else if(g.x - 1 < 0) {
-					g.x = 8;
-				}
-				break;
+            // cursor movement (with wrap around feature)
+            case KEY_LEFT:
+                if(g.x - 1 >= 0) {
+                    g.x -= 1;
+                } else if(g.x - 1 < 0) {
+                    g.x = 8;
+                }
+                break;
 
-			case KEY_RIGHT:
-				if(g.x + 1 <= 8) {
-					g.x += 1;
-				} else if(g.x + 1 > 8) {
-					g.x = 0;
-				}
-				break;
+            case KEY_RIGHT:
+                if(g.x + 1 <= 8) {
+                    g.x += 1;
+                } else if(g.x + 1 > 8) {
+                    g.x = 0;
+                }
+                break;
 
-			case KEY_UP:
-				if(g.y - 1 >= 0) {
-					g.y -= 1;
-				} else if(g.y - 1 < 0) {
-					g.y = 8;
-				}
-				break;
+            case KEY_UP:
+                if(g.y - 1 >= 0) {
+                    g.y -= 1;
+                } else if(g.y - 1 < 0) {
+                    g.y = 8;
+                }
+                break;
 
-			case KEY_DOWN:
-				if(g.y + 1 <= 8) {
-					g.y += 1;
-				} else if(g.y + 1 > 8) {
-					g.y = 0;
-				}
-				break;
+            case KEY_DOWN:
+                if(g.y + 1 <= 8) {
+                    g.y += 1;
+                } else if(g.y + 1 > 8) {
+                    g.y = 0;
+                }
+                break;
 
-			// deleting (only user given) numbers
-			case '0':
-			case KEY_BACKSPACE:
-			case KEY_DC:
-			case '.':
-				if(g.board[g.y][g.x] > 0) {
-					show_banner("Invalid placement!");
-				} else {
-					g.board[g.y][g.x] = 0;
-				}
-				break;
-				
-			// inserting numbers (if cursor is on a blank space)
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				if(g.board[g.y][g.x] > 0) {
-					strcat(g.alerts, "Invalid placement!");
-				} else {
-					g.board[g.y][g.x] = 0 - (ch - '0');
-					// check if input is safe, else alert with error messages
-					if( bad_row(ch - '0', g.x, g.y) ) {
-						strcat(g.alerts, "Bad row! ");
-					}
-					if( bad_column(ch - '0', g.x, g.y) ) {
-						strcat(g.alerts, "Bad column! ");
-					}
-					if( bad_block(ch - '0', g.x, g.y) ) {
-						strcat(g.alerts, "Bad block!");
-					}
-					strcat(g.alerts, "\0");
-				}
-				// if game is won, recolor whole board to green
-				// also prevents any number input
-		        if(won()) {
-       				int x, y;
-			       	for(x = 0; x < 9; x++) {
-		   				for(y = 0; y < 9; y++) {
-   							g.board[x][y] = abs(g.board[x][y]);
-   						}
-   					}
-   					strcpy(g.alerts, "YOU WIN!");
-				}
-				break;
+            // deleting (only user given) numbers
+            case '0':
+            case KEY_BACKSPACE:
+            case KEY_DC:
+            case '.':
+                if(g.board[g.y][g.x] > 0) {
+                    show_banner("Invalid placement!");
+                } else {
+                    g.board[g.y][g.x] = 0;
+                }
+                break;
+
+            // inserting numbers (if cursor is on a blank space)
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                if(g.board[g.y][g.x] > 0) {
+                    strcat(g.alerts, "Invalid placement!");
+                } else {
+                    g.board[g.y][g.x] = 0 - (ch - '0');
+                    // check if input is safe, else alert with error messages
+                    if( bad_row(ch - '0', g.x, g.y) ) {
+                        strcat(g.alerts, "Bad row! ");
+                    }
+                    if( bad_column(ch - '0', g.x, g.y) ) {
+                        strcat(g.alerts, "Bad column! ");
+                    }
+                    if( bad_block(ch - '0', g.x, g.y) ) {
+                        strcat(g.alerts, "Bad block!");
+                    }
+                    strcat(g.alerts, "\0");
+                }
+                // if game is won, recolor whole board to green
+                // also prevents any number input
+                if(won()) {
+                       int x, y;
+                       for(x = 0; x < 9; x++) {
+                           for(y = 0; y < 9; y++) {
+                               g.board[x][y] = abs(g.board[x][y]);
+                           }
+                       }
+                       strcpy(g.alerts, "YOU WIN!");
+                }
+                break;
 
             // let user manually redraw screen with ctrl-L
             case CTRL('l'):
@@ -307,8 +307,8 @@ main(int argc, char *argv[])
                 break;
         }
 
-		redraw_all();
-		strcpy(g.alerts, "");
+        redraw_all();
+        strcpy(g.alerts, "");
 
         // log input (and board's state) if any was received this iteration
         if (ch != ERR)
@@ -343,7 +343,7 @@ draw_grid()
     int maxy, maxx;
     getmaxyx(stdscr, maxy, maxx);
 
-    // determine where top-left corner of board belongs 
+    // determine where top-left corner of board belongs
     g.top = maxy/2 - 7;
     g.left = maxx/2 - 30;
 
@@ -471,28 +471,28 @@ draw_numbers()
     {
         for (int j = 0; j < 9; j++)
         {
-			if(has_colors()) {
-				attron(COLOR_PAIR(PAIR_NUM));
-			}
+            if(has_colors()) {
+                attron(COLOR_PAIR(PAIR_NUM));
+            }
 
-	        // determine char
-	        char c;
+            // determine char
+            char c;
             if(g.board[i][j] == 0) {
-            	c = '.';
+                c = '.';
             } else if(g.board[i][j] < 0) {
-            	// use negative values for user inputted numbers
-            	// to differentiate colors
-            	attroff(COLOR_PAIR(PAIR_NUM));
-            	c = 0 - g.board[i][j] + '0';
+                // use negative values for user inputted numbers
+                // to differentiate colors
+                attroff(COLOR_PAIR(PAIR_NUM));
+                c = 0 - g.board[i][j] + '0';
             } else {
-            	c = g.board[i][j] + '0';
+                c = g.board[i][j] + '0';
             }
             mvaddch(g.top + i + 1 + i/3, g.left + 2 + 2*(j + j/3), c);
         }
     }
 
     if(has_colors()) {
-    	attroff(COLOR_PAIR(PAIR_NUM));
+        attroff(COLOR_PAIR(PAIR_NUM));
     }
 }
 
@@ -636,7 +636,7 @@ redraw_all()
     draw_grid();
     draw_logo();
     draw_numbers();
-	show_banner(g.alerts);
+    show_banner(g.alerts);
 
     // show cursor
     show_cursor();
@@ -703,20 +703,20 @@ show_cursor()
 void
 show_banner(char *b)
 {
-	int maxx, maxy;
-	getmaxyx(stdscr, maxy, maxx);
+    int maxx, maxy;
+    getmaxyx(stdscr, maxy, maxx);
 
     // enable color if possible
     if (has_colors())
         attron(COLOR_PAIR(PAIR_BANNER));
 
-    // determine where top-left corner of board belongs 
+    // determine where top-left corner of board belongs
     mvaddstr(g.top - 3,  g.left + 13 - strlen(b) / 2, b);
 
     // disable color if possible
     if (has_colors())
         attroff(COLOR_PAIR(PAIR_BANNER));
-        
+
     show_cursor();
 }
 
@@ -800,80 +800,80 @@ startup()
 }
 
 bool bad_row(int num, int nx, int ny) {
-	int x;
-	for(x = 0; x < 9; x++) {
-		if(nx == x) {
-			continue;
-		}
-		if(abs(g.board[ny][x]) == num) {
-			return true;
-		}
-	}
-	
-	return false;
+    int x;
+    for(x = 0; x < 9; x++) {
+        if(nx == x) {
+            continue;
+        }
+        if(abs(g.board[ny][x]) == num) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool bad_column(int num, int nx, int ny) {
-	int y;
-	for(y = 0; y < 9; y++) {
-		if(ny == y) {
-			continue;
-		}
-		if(abs(g.board[y][nx]) == num) {
-			return true;
-		}
-	}
-	
-	return false;
+    int y;
+    for(y = 0; y < 9; y++) {
+        if(ny == y) {
+            continue;
+        }
+        if(abs(g.board[y][nx]) == num) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool bad_block(int num, int nx, int ny) {
-	int i, j;
-	// determine which 3x3 block to test (where the user placed a number)
-	int blockX = nx / 3;
-	int blockY = ny / 3;
-	// loop through inner block
-	for(i = 0; i < 3; i++) {
-		for(j = 0; j < 3; j++) {
-			if(ny % 3 == i && nx % 3 == j) {
-				continue;
-			}
-			/* compare absolute value since negative numbers
-			   were used to differentiate user input */
-			if(abs(g.board[i + 3 * blockY][j + 3 * blockX]) == num) {
-				return true;
-			}
-		}
-	}
+    int i, j;
+    // determine which 3x3 block to test (where the user placed a number)
+    int blockX = nx / 3;
+    int blockY = ny / 3;
+    // loop through inner block
+    for(i = 0; i < 3; i++) {
+        for(j = 0; j < 3; j++) {
+            if(ny % 3 == i && nx % 3 == j) {
+                continue;
+            }
+            /* compare absolute value since negative numbers
+               were used to differentiate user input */
+            if(abs(g.board[i + 3 * blockY][j + 3 * blockX]) == num) {
+                return true;
+            }
+        }
+    }
 
-	return false;
+    return false;
 }
 
 bool bad_square(int num, int nx, int ny) {
-	
-	if(bad_row(num, nx, ny)) {
-		return true;
-	}
-	if(bad_column(num, nx, ny)) {
-		return true;
-	}
-	if(bad_block(num, nx, ny)) {
-		return true;
-	}
-	
-	return false;
+
+    if(bad_row(num, nx, ny)) {
+        return true;
+    }
+    if(bad_column(num, nx, ny)) {
+        return true;
+    }
+    if(bad_block(num, nx, ny)) {
+        return true;
+    }
+
+    return false;
 }
 
 bool won() {
-	int x, y;
-	for(x = 0; x < 9; x++) {
-		for(y = 0; y < 9; y++) {
-			if(g.board[x][y] == 0) {
-				return false;
-			} else if(bad_square(g.board[x][y], y, x)) {
-				return false;
-			}
-		}
-	}
-	return true;
+    int x, y;
+    for(x = 0; x < 9; x++) {
+        for(y = 0; y < 9; y++) {
+            if(g.board[x][y] == 0) {
+                return false;
+            } else if(bad_square(g.board[x][y], y, x)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }

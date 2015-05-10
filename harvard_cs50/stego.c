@@ -1,5 +1,5 @@
 // Problem Set 5 - Steganography?
-       
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,7 +20,7 @@ main(int argc, char *argv[])
     char *infile = argv[1];
     char *outfile = argv[2];
 
-    // open input file 
+    // open input file
     FILE *inptr = fopen(infile, "r");
     if (inptr == NULL)
     {
@@ -46,7 +46,7 @@ main(int argc, char *argv[])
     fread(&bi, sizeof(BITMAPINFOHEADER), 1, inptr);
 
     // ensure infile is (likely) a 24-bit uncompressed BMP 4.0
-    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 || 
+    if (bf.bfType != 0x4d42 || bf.bfOffBits != 54 || bi.biSize != 40 ||
         bi.biBitCount != 24 || bi.biCompression != 0)
     {
         fclose(outptr);
@@ -76,10 +76,10 @@ main(int argc, char *argv[])
             // read RGB triple from infile
             fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
-			// turn every non-pure color to black
-			if(triple.rgbtRed != 255) {
-	           triple.rgbtGreen = triple.rgbtBlue = triple.rgbtRed = 0;
-	        }
+            // turn every non-pure color to black
+            if(triple.rgbtRed != 255) {
+               triple.rgbtGreen = triple.rgbtBlue = triple.rgbtRed = 0;
+            }
 
             // write RGB triple to outfile
             fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
